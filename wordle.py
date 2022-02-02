@@ -17,12 +17,13 @@ def check_valid(next_word, exact_match, offset_match):
     return True
 
 def get_vocab(path, word_len):
-    vocab_list = []
     with open(path, "r", encoding="utf8") as f:
-        for line in f:
-            line = line.strip()
-            if not re.match("^\[.*\]$|^##", line) and len(line) == word_len:
-                vocab_list.append(line)
+        vocab_list = list(
+            filter(
+                lambda line: not re.match("^\[.*\]$|^##", line) and len(line) == word_len,
+                map(lambda line: line.strip().lower(), f)
+            )
+        )
     return vocab_list
 
 def wordle(vocab_list, num_guesses, target):
